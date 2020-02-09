@@ -1,0 +1,37 @@
+{
+  "name": "getfix",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.4",
+    "babelify": "^10.0.0",
+    "browser-sync": "^2.26.7",
+    "browserify": "^16.5.0",
+    "del": "^5.1.0",
+    "eslint": "^6.7.2",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-cssimport": "^7.0.0",
+    "gulp-if": "^3.0.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-options": "^1.1.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-run": "^1.7.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-strip-debug": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {},
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  }
+}

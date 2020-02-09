@@ -1,0 +1,48 @@
+/* VENDOR - Default fall-backs and external files.
+========================================================================== */
+
+@import "vendor/normalize";
+
+/* BASE - Base Variable file along with starting point Mixins and Placeholders.
+========================================================================== */
+
+@import "base/variables";
+@import "base/mixins";
+@import "base/functions";
+
+/* FRAMEWORK - Structure and layout files.
+========================================================================== */
+
+@import "framework/breakpoints";
+@import "framework/grid";
+@import "framework/defaults";
+@import "framework/layout";
+@import "framework/typography";
+
+/* MODULES - Re-usable site elements.
+========================================================================== */
+// just a side note: will later be transformed to structure following atomic design
+
+// Atoms
+
+@import "modules/module";
+// @import "modules/links";
+// @import "modules/buttons";
+// @import "modules/inputs";
+// @import "modules/separators";
+
+// Molecules
+
+// @import "modules/RegisterForm";
+// @import "modules/Collapse";
+
+// Organisms
+
+// @import "modules/HEADER";
+// @import "modules/FOOTER";
+// @import "modules/gMap";
+
+/* SCREENS - Specific screen styles
+========================================================================== */
+
+@import "screens/screen";

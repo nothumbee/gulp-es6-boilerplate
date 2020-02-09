@@ -1,0 +1,18 @@
+.CONTAINER {
+  min-height: 100vh;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+.CONTENT {
+  margin: 0rem auto;
+  width: 100%;
+  max-width: 1600px;
+  @include for-tablet-landscape-up {
+    padding: 40px 60px;
+  }
+}
+
+// tailor it to your needs
