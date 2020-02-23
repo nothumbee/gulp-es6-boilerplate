@@ -102,7 +102,7 @@ const js = done => {
       .pipe(buffer())
       .pipe(gulpif(options.has("production"), stripDebug()))
       .pipe(sourcemaps.init({ loadMaps: true }))
-      .pipe(uglify())
+      .pipe(gulpif(options.has("production"), uglify()))
       .pipe(sourcemaps.write("."))
       .pipe(dest(jsURL))
       .pipe(browserSync.stream());
