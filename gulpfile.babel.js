@@ -21,6 +21,11 @@ import options from "gulp-options";
 import gulpif from "gulp-if";
 import del from "del";
 import imagemin from "gulp-imagemin";
+import log from "fancy-log";
+
+// FTP Deploy
+import credentials from "./ftpCredentials";
+import ftp from "vinyl-ftp";
 
 // Browser related plugins
 const browserSync = require("browser-sync").create();
@@ -32,7 +37,7 @@ const mapURL = "./";
 
 const jsSRC = "./src/scripts/";
 const jsFront = "global.js";
-const jsFiles = [jsFront, "newmap.js"];
+const jsFiles = [jsFront, "extraFile.js"];
 const jsURL = "./dist/js/";
 
 const imgSRC = "./src/assets/**/*";
@@ -56,24 +61,24 @@ const clean = () => del(["./dist/"]);
 const browser_sync = () => {
   browserSync.init({
     server: {
-      baseDir: "./dist/"
+      baseDir: "./dist/",
     },
-    open: false
+    open: false,
   });
 };
 
-const reload = done => {
+const reload = (done) => {
   browserSync.reload();
   done();
 };
 
-const css = done => {
+const css = (done) => {
   src([styleSRC])
     .pipe(sourcemaps.init())
     .pipe(
       sass({
         errLogToConsole: true,
-        outputStyle: "compressed"
+        outputStyle: "compressed",
       })
     )
     .on("error", console.error.bind(console))
@@ -86,17 +91,17 @@ const css = done => {
   done();
 };
 
-const js = done => {
-  jsFiles.map(entry => {
+const js = (done) => {
+  jsFiles.map((entry) => {
     browserify({
-      entries: [jsSRC + entry]
+      entries: [jsSRC + entry],
     })
       .transform(babelify, { presets: ["@babel/preset-env"] })
       .bundle()
       .pipe(source(entry))
       .pipe(
         rename({
-          extname: ".min.js"
+          extname: ".min.js",
         })
       )
       .pipe(buffer())
@@ -110,10 +115,23 @@ const js = done => {
   done();
 };
 
+const deploy = (done) => {
+  const { host, user, password } = credentials;
+  const remotePath = "/";
+  const conn = ftp.create({
+    host,
+    user,
+    password,
+    log,
+  });
+  src(["./dist/**/*.*"])
+    .pipe(conn.newer(remotePath))
+    .pipe(conn.dest(remotePath));
+  done();
+};
+
 const triggerPlumber = (src_file, dest_file) => {
-  return src(src_file)
-    .pipe(plumber())
-    .pipe(dest(dest_file));
+  return src(src_file).pipe(plumber()).pipe(dest(dest_file));
 };
 
 const images = () => {
@@ -122,8 +140,8 @@ const images = () => {
     .pipe(
       imagemin([
         imagemin.svgo({
-          plugins: [{ removeViewBox: false }, { cleanupIDs: false }]
-        })
+          plugins: [{ removeViewBox: false }, { cleanupIDs: false }],
+        }),
       ])
     )
     .pipe(dest(imgURL));
@@ -153,4 +171,5 @@ task("images", images);
 task("fonts", fonts);
 task("html", html);
 task("default", series(clean, parallel(css, js, images, fonts, html)));
+task("deploy", series("default", deploy));
 task("watch", parallel(browser_sync, watch_files));

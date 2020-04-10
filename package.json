@@ -1,5 +1,6 @@
 {
-  "name": "getfix",
+  "name": "gulp-boilerplate",
+  "author": "Vojtěch Bezpalec",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -20,7 +21,6 @@
     "gulp-options": "^1.1.1",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.4.0",
-    "gulp-run": "^1.7.1",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-strip-debug": "^3.0.0",
