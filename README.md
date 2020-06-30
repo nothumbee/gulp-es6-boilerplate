@@ -18,3 +18,17 @@ gulp
 
 # any problems?
 try to remove node_nodules, yarn.lock and package-lock.json if exists and run 'yarn install' again
+
+# deploy task
+First create ftpCredentials.js in root with your FTP credentials
+
+export default {
+  host: "",
+  user: "",
+  password: "",
+  remotePath: "",
+};
+
+!!! You should never put this file to git or anything like this, that is why I excluded it from git in .gitignore 
+
+then run yarn deploy and enjoy
