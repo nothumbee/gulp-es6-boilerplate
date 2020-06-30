@@ -116,8 +116,7 @@ const js = (done) => {
 };
 
 const deploy = (done) => {
-  const { host, user, password } = credentials;
-  const remotePath = "/";
+  const { host, user, password, remotePath = "/" } = credentials;
   const conn = ftp.create({
     host,
     user,
