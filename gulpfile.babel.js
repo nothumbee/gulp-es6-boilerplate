@@ -123,9 +123,7 @@ const deploy = (done) => {
     password,
     log,
   });
-  src(["./dist/**/*.*"])
-    .pipe(conn.newer(remotePath))
-    .pipe(conn.dest(remotePath));
+  src(["./dist/**/*.*"]).pipe(conn.newer(remotePath)).pipe(conn.dest(remotePath));
   done();
 };
 
