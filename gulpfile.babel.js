@@ -22,6 +22,7 @@ import gulpif from "gulp-if";
 import del from "del";
 import imagemin from "gulp-imagemin";
 import log from "fancy-log";
+import sitemap from "gulp-sitemap";
 
 // FTP Deploy
 import credentials from "./ftpCredentials";
@@ -37,7 +38,7 @@ const mapURL = "./";
 
 const jsSRC = "./src/scripts/";
 const jsFront = "global.js";
-const jsFiles = [jsFront, "extraFile.js"];
+const jsFiles = [jsFront, "another-bundle.js"];
 const jsURL = "./dist/js/";
 
 const imgSRC = "./src/assets/**/*";
@@ -115,6 +116,18 @@ const js = (done) => {
   done();
 };
 
+const generateSitemap = () => {
+  return src("src/**/*.html", {
+    read: false,
+  })
+    .pipe(
+      sitemap({
+        siteUrl: "http://www.weby.bezpalec.com",
+      })
+    )
+    .pipe(dest("./dist"));
+};
+
 const deploy = (done) => {
   const { host, user, password, remotePath = "/" } = credentials;
   const conn = ftp.create({
@@ -167,6 +180,7 @@ task("js", js);
 task("images", images);
 task("fonts", fonts);
 task("html", html);
-task("default", series(clean, parallel(css, js, images, fonts, html)));
+task("sitemap", generateSitemap);
+task("default", series(clean, parallel(css, js, images, fonts, html, generateSitemap)));
 task("deploy", series("default", deploy));
 task("watch", parallel(browser_sync, watch_files));
