@@ -23,6 +23,8 @@ import del from "del";
 import imagemin from "gulp-imagemin";
 import log from "fancy-log";
 import sitemap from "gulp-sitemap";
+import fileinclude from "gulp-file-include";
+import i18n from "gulp-html-i18n";
 
 // FTP Deploy
 import credentials from "./ftpCredentials";
@@ -30,6 +32,9 @@ import ftp from "vinyl-ftp";
 
 // Browser related plugins
 const browserSync = require("browser-sync").create();
+
+// Site URL - TODO convert to ENV variable
+const siteUrl = "http://www.weby.bezpalec.com";
 
 // Project related constants
 const styleSRC = "./src/styles/global.scss";
@@ -49,6 +54,10 @@ const fontsURL = "./dist/fonts/";
 
 const htmlSRC = "./src/**/*.html";
 const htmlURL = "./dist/";
+const htmlPartialsDir = "src/partials/";
+
+const langDir = "./src/lang/";
+const langFallback = "cs-CZ";
 
 const styleWatch = "./src/styles/**/*.scss";
 const jsWatch = "./src/scripts/**/*.js";
@@ -122,7 +131,7 @@ const generateSitemap = () => {
   })
     .pipe(
       sitemap({
-        siteUrl: "http://www.weby.bezpalec.com",
+        siteUrl,
       })
     )
     .pipe(dest("./dist"));
@@ -162,7 +171,21 @@ const fonts = () => {
 };
 
 const html = () => {
-  return triggerPlumber(htmlSRC, htmlURL);
+  return src(htmlSRC)
+    .pipe(plumber())
+    .pipe(
+      fileinclude({
+        basepath: htmlPartialsSRC,
+      })
+    )
+    .pipe(
+      i18n({
+        langDir,
+        trace: true,
+        fallback: langFallback,
+      })
+    )
+    .pipe(dest(htmlURL));
 };
 
 const watch_files = () => {
@@ -183,4 +206,4 @@ task("html", html);
 task("sitemap", generateSitemap);
 task("default", series(clean, parallel(css, js, images, fonts, html, generateSitemap)));
 task("deploy", series("default", deploy));
-task("watch", parallel(browser_sync, watch_files));
+task("watch", series("default", parallel(browser_sync, watch_files)));
